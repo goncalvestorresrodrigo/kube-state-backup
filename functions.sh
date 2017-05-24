@@ -1,5 +1,4 @@
-#!/bin/bash -e
-
+#!/bin/bash
 
 function dump_state() {
 
@@ -16,7 +15,7 @@ function dump_state() {
 	        .metadata.resourceVersion,
 	        .metadata.creationTimestamp,
 	        .metadata.generation
-	    )' > /backup/namespaces-dump.json
+	    )' > /tmp/backup/namespaces-dump.json
 	echo ""
 
 	# dump global resources state
@@ -31,13 +30,13 @@ function dump_state() {
 	          .items[].metadata.resourceVersion,
 	          .items[].metadata.creationTimestamp,
 	          .items[].metadata.generation
-	      )' >> /backup/global-resources-dump.json
+	      )' >> /tmp/backup/global-resources-dump.json
 	done
 	echo ""
 
 	# dump resources state
 	echo "Dumping resources" > /dev/stderr
-	for namespace in $(jq -r '.metadata.name' < /backup/namespaces-dump.json);do
+	for namespace in $(jq -r '.metadata.name' < /tmp/backup/namespaces-dump.json);do
 	    echo "Namespace: ${namespace}" > /dev/stderr
 	    /kubectl --namespace="${namespace}" get --export -o=json ${RESOURCETYPES} | \
 	    jq '.items[] |
@@ -54,7 +53,7 @@ function dump_state() {
 	            .spec.template.spec.dnsPolicy,
 	            .spec.template.spec.terminationGracePeriodSeconds,
 	            .spec.template.spec.restartPolicy
-	        )' >> /backup/cluster-dump.json
+	        )' >> /tmp/backup/cluster-dump.json
 	done
 	echo ""
 
@@ -67,13 +66,13 @@ function dump_state() {
 		.metadata.selfLink,
 		.metadata.resourceVersion,
 		.metadata.creationTimestamp
-		)' > /backup/helm-releases-dump.json
+		)' > /tmp/backup/helm-releases-dump.json
 	echo ""
 }
 
 function tar_files() {
-	cp /restore_state.sh /backup
-	cd /backup
+	cp /restore_state.sh /tmp/backup
+	cd /tmp/backup
 	tar czvf ${TARFILENAME} *
 	cd /
 }
@@ -88,7 +87,7 @@ function upload_s3() {
 
 	# upload assets to S3 bucket
 	echo "Upload assets backup to s3 ${BUCKET}"
-	aws s3 cp /backup/${TARFILENAME} s3://${BUCKET}/ --region ${REGION}
+	aws s3 cp /tmp/backup/${TARFILENAME} s3://${BUCKET}/ --region ${REGION}
 	echo "✓ Assets backup uploaded"
 }
 
@@ -104,6 +103,6 @@ function upload_gcs() {
 
 	# upload assets to GCS bucket
 	echo "Upload assets backup to GCS ${BUCKET}"
-	gsutil cp /backup/${TARFILENAME} gs://${BUCKET}/
+	gsutil cp /tmp/backup/${TARFILENAME} gs://${BUCKET}/
 	echo "✓ Assets backup uploaded"
 }

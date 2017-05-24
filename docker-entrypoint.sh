@@ -7,9 +7,6 @@ GLOBALRESOURCES=${GLOBALRESOURCES:-"storageclasses"}
 RESOURCETYPES=${RESOURCETYPES:-"svc,ingress,configmap,secrets,ds,rc,deployment,statefulset,job,cronjob,serviceaccount,thirdpartyresource,networkpolicy,storageclass"}
 TARFILENAME="kube-state-$(date +%FT%T).tar.gz"
 
-# cleanp backup folder
-rm -f /backup/*
-
 # dump state
 dump_state
 
