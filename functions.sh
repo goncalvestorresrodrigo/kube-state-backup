@@ -79,16 +79,15 @@ function tar_files() {
 }
 
 function upload_s3() {
+	# check if bucket exits, if not create it
+	if aws s3 ls "s3://$BUCKET" 2>&1 | grep -q 'NoSuchBucket'
+	then
+		echo "$BUCKET does not exit, creating it"
+		aws s3 mb s3://${BUCKET} --region ${REGION}
+	fi
+
 	# upload assets to S3 bucket
-	echo "❤ Copy backup assets to s3 ${BUCKET}"
+	echo "❤ Upload assets backup to s3 ${BUCKET}"
 	aws s3 cp /backup/${TARFILENAME} s3://${BUCKET}/ --region ${REGION}
-	echo "✓ Assets backup copy success"
-}
-
-function upload_gcs() {
-
-}
-
-function upload_azure() {
-
+	echo "✓ Assets backup uploaded"
 }

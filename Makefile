@@ -16,10 +16,10 @@
 REGISTRY ?= quay.io/stackpoint
 
 # full docker image name
-IMAGE := $(REGISTRY)/kube-backup
+IMAGE := $(REGISTRY)/kube-state-backup
 
 # This version-strategy uses a manual value to set the version string
-VERSION := 0.1.0
+VERSION := 0.1.3
 
 # If you want to build and push
 all: build push
