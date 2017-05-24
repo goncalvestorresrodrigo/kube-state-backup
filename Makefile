@@ -19,7 +19,7 @@ REGISTRY ?= quay.io/stackpoint
 IMAGE := $(REGISTRY)/kube-state-backup
 
 # This version-strategy uses a manual value to set the version string
-VERSION := 0.1.3
+VERSION := 0.1.4
 
 # If you want to build and push
 all: build push
@@ -42,4 +42,4 @@ version:
 	@echo $(VERSION)
 
 run: container-name
-	@docker run -it
+	@docker run -it $(IMAGE):$(VERSION) bash

@@ -87,7 +87,23 @@ function upload_s3() {
 	fi
 
 	# upload assets to S3 bucket
-	echo "❤ Upload assets backup to s3 ${BUCKET}"
+	echo "Upload assets backup to s3 ${BUCKET}"
 	aws s3 cp /backup/${TARFILENAME} s3://${BUCKET}/ --region ${REGION}
+	echo "✓ Assets backup uploaded"
+}
+
+function upload_gcs() {
+	# check if bucket exits, if not create it
+	if gsutil ls 2>&1 | grep -q -w "$BUCKET"
+	then
+		echo "$BUCKET does exit"
+	else
+		echo "$BUCKET does not exit, creating it"
+		gsutil mb -l ${REGION} gs://${BUCKET}
+	fi
+
+	# upload assets to GCS bucket
+	echo "Upload assets backup to GCS ${BUCKET}"
+	gsutil cp /backup/${TARFILENAME} gs://${BUCKET}/
 	echo "✓ Assets backup uploaded"
 }

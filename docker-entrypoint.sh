@@ -5,7 +5,7 @@ source /functions.sh
 #
 GLOBALRESOURCES=${GLOBALRESOURCES:-"storageclasses"}
 RESOURCETYPES=${RESOURCETYPES:-"svc,ingress,configmap,secrets,ds,rc,deployment,statefulset,job,cronjob,serviceaccount,thirdpartyresource,networkpolicy,storageclass"}
-TARFILENAME="$(date +%FT%T).tar.gz"
+TARFILENAME="kube-state-$(date +%FT%T).tar.gz"
 
 # cleanp backup folder
 rm -f /backup/*
@@ -17,4 +17,10 @@ dump_state
 tar_files
 
 # upload to cloud storage
-upload_s3
+if [ "${STORAGE}" = "aws" ]
+then
+  upload_s3
+elif [ "${STORAGE}" = "gcs" ]
+then
+  upload_gcs
+fi
