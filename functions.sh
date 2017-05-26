@@ -8,7 +8,7 @@ function dump_state() {
 	jq '.items[] |
 		select(.metadata.name!="kube-system") |
 		select(.metadata.name!="kube-public") |
-		select(.metadata.name!="stackpoint-system") |
+		select(.metadata.name!="kube-backup") |
 		del(.status,
 	        .metadata.uid,
 	        .metadata.selfLink,
