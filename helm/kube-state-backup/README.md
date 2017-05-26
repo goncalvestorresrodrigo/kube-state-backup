@@ -1,17 +1,8 @@
-kube-backup
-===========
-[![Docker Repository on Quay](https://quay.io/repository/stackpoint/kube-state-backup/status "Docker Repository on Quay")](https://quay.io/repository/stackpoint/kube-state-backup)
+# Kubernetes state backup as a Cron Job
 
-Kubernetes state backup script, designed to be ran as Kubernetes CronJob.
+This chart will schedule [Kubernetes Cron Job](https://kubernetes.io/docs/user-guide/cron-jobs/) to backup Kubernetes state to AWS or GCS cloud storage.
 
-Props to @pieterlange [kube-state](https://github.com/pieterlange/kube-backup) project.
-
-Setup
------
-Use the Helm [chart](helm) and deploy it to Kubernetes as `CronJob` which will ensure cluster backups of Kubernetes resource definitions to your AWS S3 or GCS bucket.
-
-Install for the first time
---------------------------
+## Install for the first time
 ### AWS S3
 ```bash
 helm upgrade --install kube-backup kube-state-backup --namespace kube-backup \
@@ -35,8 +26,3 @@ helm upgrade --install kube-backup kube-state-backup --namespace kube-backup \
 helm upgrade kube-backup kube-state-backup --reuse-values --set schedule="*/30 * * * *"
 helm upgrade kube-backup kube-state-backup --reuse-values --set imageTag="0.1.8"
 ```
-
-
-License
--------
-This project is MIT licensed.

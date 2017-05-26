@@ -1,0 +1,95 @@
+##  Docker image and tag version
+##
+image: quay.io/stackpoint/kube-state-backup
+imageTag: 0.1.7
+
+## Specify a imagePullPolicy
+## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+imagePullPolicy: IfNotPresent
+
+## Schedule when to run
+## ref: https://kubernetes.io/docs/user-guide/cron-jobs/#schedule
+##
+schedule: "*/50 * * * *"
+
+## Concurrency Policy
+## ref: https://kubernetes.io/docs/user-guide/cron-jobs/#concurrency_policy
+##
+concurrencyPolicy: Replace
+
+## Restart Policy
+##
+restartPolicy: OnFailure
+
+## Backup to AWS S3 bucket
+##
+aws:
+  enabled: false
+  accessKeyId: ""
+  secretAccessKey: ""
+  bucket: ""
+  region: ""
+
+## Backup to GCS bucket
+## check the URL below how to obtain HMAC authentication keys
+## ref: https://cloud.google.com/storage/docs/migrating#keys
+##
+gcs:
+  enabled: false
+  projectId: ""
+  accessKeyId: ""
+  secretAccessKey: ""
+  bucket: ""
+  # multi-regional storage class: us/eu/asia
+  region: ""
+
+## Kubernetes resources type
+##
+kubeState:
+  globalResources: "storageclasses"
+  resourceTypes: "svc,ingress,configmap,secrets,ds,rc,deployment,statefulset,job,cronjob,serviceaccount,thirdpartyresource,networkpolicy,storageclass"
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    memory: 50Mi
+    cpu: 10m
+  limits:
+    memory: 100Mi
+    cpu: 100m
+
+## Clean the old kube-state-backup jobs
+##
+jobCleanup:
+  ## Enable old jobs clean up
+  enabled: false
+  ##  Docker image and tag version
+  ##
+  image: quay.io/coreos/hyperkube
+  imageTag: v1.6.4
+  ## Specify a imagePullPolicy
+  ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'
+  ##
+  imagePullPolicy: IfNotPresent
+  ## Schedule when to run
+  ##
+  schedule: "1 6 * * *"
+  ## Concurrency Policy
+  ##
+  concurrencyPolicy: Replace
+  ## Restart Policy
+  ##
+  restartPolicy: OnFailure
+  ## Configure resource requests and limits
+  ##
+  resources:
+    requests:
+      memory: 50Mi
+      cpu: 10m
+    limits:
+      memory: 256Mi
+      cpu: 100m
