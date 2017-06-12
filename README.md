@@ -4,7 +4,7 @@ kube-backup
 
 Kubernetes state backup script, designed to be ran as Kubernetes CronJob.
 
-Props to @pieterlange [kube-state](https://github.com/pieterlange/kube-backup) project.
+Props to @pieterlange [kube-backup](https://github.com/pieterlange/kube-backup) project.
 
 Setup
 -----
