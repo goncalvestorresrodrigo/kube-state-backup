@@ -39,8 +39,9 @@ aws:
 gcs:
   enabled: false
   projectId: ""
-  accessKeyId: ""
-  secretAccessKey: ""
+  ## Service Account Key must be encoded with base64
+  ## e.g. `cat service-account.json | base64 -w 0`
+  serviceAccountKey: """
   bucket: ""
   # multi-regional storage class: us/eu/asia
   region: ""
@@ -63,6 +64,7 @@ resources:
     cpu: 100m
 
 ## Clean the old kube-state-backup jobs
+## Only set it for kubernetes version is 1.5 or less
 ##
 jobCleanup:
   ## Enable old jobs clean up
