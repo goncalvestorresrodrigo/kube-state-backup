@@ -24,7 +24,7 @@ helm upgrade --install kube-backup kube-state-backup --namespace kube-backup \
 ```bash
 helm upgrade --install kube-backup kube-state-backup --namespace kube-backup \
     --set schedule="*/50 * * * *",gcs.enabled="true",gcs.projectId="project-123" \
-    --set gcs.accessKeyId="GOOG74NFENMO3",gcs.secretAccessKey="8GNFEIUMFEFNW7NRIQRJ38RNRQRRR8" \
+    --set gcs.serviceAccountKey="$(cat sa.json | base64)" \
     --set gcs.bucket="my-kube-state-backup",gcs.region="eu"
 ```
 
