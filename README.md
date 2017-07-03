@@ -37,4 +37,4 @@ helm upgrade kube-backup kube-state-backup --reuse-values --set imageTag="0.1.8"
 
 License
 -------
-This project is MIT licensed.
+This project is Apache licensed.
