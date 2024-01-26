@@ -4,7 +4,7 @@ function dump_state() {
 
 	echo "Dumping namespaces" > /dev/stderr
 	# dump all namespaces that are not kube-system/public or stackpoint-system
-	/kubectl get --export -o=json ns | \
+	/kubectl get -o=json ns | \
 	jq '.items[] |
 		select(.metadata.name!="kube-system") |
 		select(.metadata.name!="kube-public") |
@@ -21,7 +21,7 @@ function dump_state() {
 	# dump global resources state
 	for resource in ${GLOBALRESOURCES}; do
 	  echo "Dumping resource: ${resource}" > /dev/stderr
-	  /kubectl get --export -o=json ${resource} | \
+	  /kubectl get -o=json ${resource} | \
 	  jq --sort-keys \
 	      'del(
 	          .items[].metadata.annotations."kubectl.kubernetes.io/last-applied-configuration",
@@ -38,7 +38,7 @@ function dump_state() {
 	echo "Dumping resources" > /dev/stderr
 	for namespace in $(jq -r '.metadata.name' < /tmp/backup/namespaces-dump.json);do
 	    echo "Namespace: ${namespace}" > /dev/stderr
-	    /kubectl --namespace="${namespace}" get --export -o=json ${RESOURCETYPES} | \
+	    /kubectl --namespace="${namespace}" get -o=json ${RESOURCETYPES} | \
 	    jq '.items[] |
 	        select(.type!="kubernetes.io/service-account-token") |
 	        del(
@@ -59,7 +59,7 @@ function dump_state() {
 
 	# dump Helm releases
 	echo "Dumping Helm releases" > /dev/stderr
-	/kubectl --namespace=kube-system get --export -o=json -l OWNER=TILLER configmap | \
+	/kubectl --namespace=kube-system get -o=json -l OWNER=TILLER configmap | \
 	jq '.items[] |
 		del(
 		.metadata.uid,

@@ -1,6 +1,6 @@
 FROM alpine:3.5
 
-ENV KUBECTL_VERSION 1.6.4
+ENV KUBECTL_VERSION 1.23.15
 ENV KUBECTL_URI https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl
 
 RUN apk update && \
@@ -20,8 +20,9 @@ RUN apk update && \
     libffi-dev \
     python-dev \
     musl-dev \
-    openssl-dev \
-    && pip install ijson awscli gsutil azure-storage \
+    libressl-dev \
+    && pip install --no-cache-dir cryptography=2.1.4 \
+    && pip install ijson awscli gsutil azure-storage-blob \
     && apk del build-deps \
     && rm -rf /var/cache/apk/*
 
